@@ -7,8 +7,8 @@ import pandas as pd
 import requests
 from datetime import datetime
 from typing import Dict, Optional, Union, List
-from .utils.api_handler import APIHandler
-from .utils.data_validator import DataValidator
+from utils.api_handler import APIHandler
+from utils.data_validator import DataValidator
 
 class OptionsDataFetcher:
     """

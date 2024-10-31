@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Optional, Union
 from datetime import datetime, timedelta
-from .utils.data_validator import DataValidator
+from utils.data_validator import DataValidator
 from scipy.stats import norm
 
 class PremiumAnalyzer:

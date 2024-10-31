@@ -5,8 +5,8 @@ Handles margin calculations for options trading positions.
 
 from typing import Dict, List, Optional, Union
 import pandas as pd
-from .utils.api_handler import APIHandler
-from .utils.data_validator import DataValidator
+from utils.api_handler import APIHandler
+from utils.data_validator import DataValidator
 
 class MarginCalculator:
     """
