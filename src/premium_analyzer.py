@@ -296,7 +296,7 @@ class PremiumAnalyzer:
         
         for days in time_points:
             theta_decay = premium_metrics['daily_theta_decay'] * days
-            remaining_premium = max(0, premium_metrics['premium'] - theta_decay)
+            remaining_premium = max(0, premium_metrics['pre mium'] - theta_decay)
             
             decay_data.append({
                 'days': days,
