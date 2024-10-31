@@ -182,22 +182,4 @@ Detailed documentation is available in the `/docs` directory:
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## 📞 Contact
-
-- Developer: [Your Name]
-- Email: [Your Email]
-- LinkedIn: [Your LinkedIn Profile]
-- Project Link: [GitHub Repository URL]
-
-## 🙏 Acknowledgments
-
-- Breakout Consultancy Private Limited for the internship opportunity
-- Indian brokers for providing API access
-- Open source community for various tools and libraries
-
----
 Developed as part of the Python Development Internship at BreakoutAI
