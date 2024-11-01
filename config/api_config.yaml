@@ -1,4 +1,10 @@
-{
+upstox:
+  api_key: "YOUR_API_KEY"
+  api_secret: "YOUR_API_SECRET"
+  redirect_uri: "YOUR_REDIRECT_URI"
+  access_token: "YOUR_ACCESS_TOKEN"
+  
+  {
   "status": "success",
   "data": [
     {
@@ -52,3 +58,4 @@
     }
   ]
 }
+
