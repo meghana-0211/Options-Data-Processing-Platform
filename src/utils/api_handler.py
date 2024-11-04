@@ -1,109 +1,98 @@
-"""
-QuantEdge - API Handler Utility
-Manages API interactions with various brokers.
-"""
-
+# src/utils/api_handler.py
+import yaml
+import os
 import requests
 from typing import Dict, Optional
-from datetime import datetime
 import logging
 
 class APIHandler:
-    """Handles all API interactions with brokers."""
+    """Handles all API interactions with Upstox API."""
     
-    def __init__(self, broker: str, api_key: Optional[str] = None):
+    def __init__(self, broker: str = "upstox"):
         """
         Initialize API handler with broker credentials.
         
         Args:
-            broker (str): Broker name
-            api_key (str, optional): API key for authentication
+            broker (str): Broker name (default: upstox)
         """
         self.broker = broker.lower()
-        self.api_key = api_key
-        self.base_urls = {
-            'upstox': 'https://api.upstox.com/v2/',
-            'fyers': 'https://api.fyers.in/api/v2/',
-            'zerodha': 'https://api.kite.trade/'
-        }
+        self.config = self._load_config()
         self.session = requests.Session()
         self._setup_session()
         
+    def _load_config(self) -> Dict:
+        """Load API configuration from YAML file."""
+        config_path = os.path.join('config', 'api_config.yaml')
+        
+        try:
+            with open(config_path, 'r') as file:
+                config = yaml.safe_load(file)
+            return config[self.broker]
+        except Exception as e:
+            logging.error(f"Error loading config: {str(e)}")
+            raise
+        
     def _setup_session(self):
         """Configure API session with headers and authentication."""
-        if self.api_key:
-            self.session.headers.update({
-                'Authorization': f'Bearer {self.api_key}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            })
+        self.session.headers.update({
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {self.config["access_token"]}',
+            'Content-Type': 'application/json'
+        })
     
     def fetch_option_chain(self, instrument_name: str, expiry_date: str, side: str) -> Dict:
-        """
-        Fetch option chain data from broker API.
+        """Fetch option chain data from Upstox API."""
+        endpoint = f"{self.config['base_url']}/market-data/option-chain"
         
-        Args:
-            instrument_name (str): Name of the instrument
-            expiry_date (str): Expiry date
-            side (str): Option type - CE/PE
-            
-        Returns:
-            dict: Option chain data
-        """
-        endpoint = f"market-data/option-chain/{instrument_name}"
         params = {
+            'symbol': f'NSE_FO|{instrument_name}',
             'expiry': expiry_date,
-            'optionType': side
+            'strike_price': 0,  # 0 means all strikes
+            'option_type': side
         }
         
         try:
-            response = self.session.get(
-                f"{self.base_urls[self.broker]}{endpoint}",
-                params=params
-            )
+            response = self.session.get(endpoint, params=params)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"API Error: {str(e)}")
             raise
 
-    def fetch_margin_requirements(
-        self,
-        instrument_name: str,
-        strike_price: float,
-        side: str,
-        qty: int,
-        position_type: str
-    ) -> Dict:
-        """
-        Fetch margin requirements from broker API.
+    def fetch_margin_requirements(self, instrument_name: str, strike_price: float, 
+                                side: str, qty: int, position_type: str) -> Dict:
+        """Fetch margin requirements from Upstox API."""
+        endpoint = f"{self.config['base_url']}/margin/charges"
         
-        Args:
-            instrument_name (str): Name of the instrument
-            strike_price (float): Strike price
-            side (str): Option type - CE/PE
-            qty (int): Quantity
-            position_type (str): Buy/Sell
-            
-        Returns:
-            dict: Margin requirements
-        """
-        endpoint = "margin/required"
         payload = {
-            'instrument': instrument_name,
-            'strike': strike_price,
-            'optionType': side,
+            'instrument': f'NSE_FO|{instrument_name}',
             'quantity': qty,
-            'positionType': position_type
+            'product': 'I',  # Intraday
+            'transaction_type': 'BUY' if position_type == 'buy' else 'SELL',
+            'price': strike_price
         }
         
         try:
-            response = self.session.post(
-                f"{self.base_urls[self.broker]}{endpoint}",
-                json=payload
-            )
+            response = self.session.post(endpoint, json=payload)
             response.raise_for_status()
             return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"API Error: {str(e)}")
+            raise
+
+    def fetch_underlying_price(self, instrument_name: str) -> float:
+        """Fetch current market price from Upstox API."""
+        endpoint = f"{self.config['base_url']}/market-quote/ltp"
+        
+        params = {
+            'symbol': f'NSE_EQ|{instrument_name}'
+        }
+        
+        try:
+            response = self.session.get(endpoint, params=params)
+            response.raise_for_status()
+            data = response.json()
+            return float(data['data']['last_price'])
         except requests.exceptions.RequestException as e:
             logging.error(f"API Error: {str(e)}")
             raise

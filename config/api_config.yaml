@@ -1,0 +1,4 @@
+upstox:
+  api_key: "2HCDTG"  # Your API key
+  access_token: "eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIySENEVEciLCJqdGkiOiI2NzI1MDgxNmQyYjIwYzNhYTAwNjYzMTciLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzMwNDgwMTUwLCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3MzA0OTg0MDB9.ruJWpkbXD4uZB4ch78F6AiJ_i6ae1sRpbnmPH-TXP_U"
+  base_url: "https://api.upstox.com/v2"
