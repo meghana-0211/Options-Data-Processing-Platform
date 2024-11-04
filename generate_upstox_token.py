@@ -1,5 +1,5 @@
 # generate_upstox_token.py
-from upstox_python import Upstox
+from upstox_api.api import Upstox
 import yaml
 
 def generate_upstox_token():
@@ -26,7 +26,7 @@ def generate_upstox_token():
     config = {
         'upstox': {
             'api_key': api_key,
-            'api_secret': api_secret,
+    
             'redirect_uri': redirect_uri,
             'access_token': access_token
         }
