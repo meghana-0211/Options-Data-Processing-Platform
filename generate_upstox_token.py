@@ -13,7 +13,7 @@ def generate_upstox_token():
 
     # Generate login URL
     login_url = upstox_client.get_login_url()
-    print("Please visit this URL and authorize the app:")
+    print("Please visit the URL and authorize the app:")
     print(login_url)
 
     # After authorization, you'll receive an authorization code
